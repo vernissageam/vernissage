@@ -1,0 +1,2 @@
+Hi {{ user.first_name }} {{ user.last_name }}
+Your account has been activated.

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div class="main_content">
+        <form method="post" action=".">
+            {% csrf_token %}
+
+            <div class="logCont">
+                <div>
+                    <h3>Recover Password</h3>
+                    <div class="formRow">
+                        <label class="formLabel">{{ reset_form.password.label }}</label>
+                        {{ reset_form.password }}
+                        {{ reset_form.password.errors }}
+                    </div>
+                    <div class="formRow">
+                        <label class="formLabel">{{ reset_form.repeat_password.label }}</label>
+                        {{ reset_form.repeat_password }}
+                        {{ reset_form.repeat_password.errors }}
+                    </div>
+                    <input type="hidden" name="reset_key" value="{{ reset_key }}">
+                    <input type="submit" class="btn btnPrime sizeM btnBlock" value="Save">
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

@@ -1,0 +1,31 @@
+{% load static %}
+
+<header>
+    <div class="container">
+        <div class="headerLogo pullLeft">
+            <a href="/">
+                <img src="{% static 'images/logo.jpg' %}" alt="logo" width="200px">
+            </a>
+        </div>
+        <div class="pullRight">
+            <nav>
+                <ul>
+                    {% if user.is_authenticated %}
+                        <li><a href="/tasks/task_reports" class="textBtn">Reports</a></li>
+                        <li><a href="{% url 'accounts:logout' %}" class="textBtn">Logout</a></li>
+                    {% else %}
+                        <li><a href="{% url 'accounts:login' %}"  class="textBtn">Login</a></li>
+                        <li><a href="{% url 'accounts:register_buyer' %}" class="textBtn">Sign Up as Buyer</a></li>
+                        <li><a href="{% url 'accounts:register_seller' %}" class="textBtn">Sign Up as Seller</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+</header>
+
+{% block extra_js %}
+<script type="text/javascript">
+
+</script>
+{% endblock extra_js %}

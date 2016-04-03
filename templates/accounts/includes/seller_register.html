@@ -1,0 +1,37 @@
+<form id="register_form" method="post" action=".">
+    <h1>Sign up as SELLER</h1>
+    {% csrf_token %}
+    <div class="form">
+        {{ form.username }}
+        {{ form.username.errors }}
+
+        {{ form.first_name }}
+        {{ form.first_name.errors }}
+
+        {{ form.last_name }}
+        {{ form.last_name.errors }}
+
+        {{ form.email }}
+        {{ form.email.errors }}
+
+        {{ form.phone_number }}
+        {{ form.phone_number.errors }}
+
+        {{ shop_form.name }}
+        {{ shop_form.name.errors }}
+
+        {{ shop_form.description }}
+        {{ shop_form.description.errors }}
+
+        {{ shop_form.categories }}
+        {{ shop_form.categories.errors }}
+
+        {{ form.password }}
+        {{ form.password.errors }}
+
+        {{ form.repeat_password }}
+        {{ form.repeat_password.errors }}
+
+        <input type="submit" value="Sign up"/>
+    </div>
+</form>

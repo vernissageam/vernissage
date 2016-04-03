@@ -1,0 +1,25 @@
+{% if messages %}
+    <div class="container top_note">
+        {% for message in messages %}
+            {% ifequal message.tags 'success' %}
+                <div class="message_box success">
+                    <p>{{ message|safe }}</p>
+                    <div class="self_close"><i class="icon2-times"></i></div>
+                </div>
+            {% else %}
+                <div class="message_box error">
+                    <p>{{ message|safe }}</p>
+                    <div class="self_close"><i class="icon2-times"></i></div>
+                </div>
+            {% endifequal %}
+        {% endfor %}
+    </div>
+{% endif %}
+
+<script type="text/javascript">
+    $(document).ready(function(){
+       $('.self_close').click(function(){
+          $(this).parent().remove();
+       });
+    });
+</script>

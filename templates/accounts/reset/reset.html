@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div class="main_content">
+        <div class="logCont">
+            <div>
+                <h3>Recover Password</h3>
+                <form method="post" action=".">
+                    {% csrf_token %}
+
+                    <div class="formRow">
+                        <label class="formLabel">Email</label>
+                        {{ reset_form.email }}
+                        {{ reset_form.email.errors }}
+                    </div>
+                <input type="submit" class="btn btnPrime sizeM btnBlock" value="Reset">
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

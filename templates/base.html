@@ -1,0 +1,45 @@
+{% load staticfiles %}
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" type="image/x-icon" href={% static "images/favicon.ico" %}>
+    <title>
+      {% block title %}
+        Vern
+      {% endblock title %}
+    </title>
+    <meta name="google-site-verification" content="" >
+
+    {% include "includes/stylesheets.html" %}
+    {% include "includes/javascript.html" %}
+    {% block extra_styles %}
+    {% endblock extra_styles %}
+
+  </head>
+  <body class="">
+    <main class="mainWrap">
+        {% include "includes/nav.html" %}
+        {% include "includes/messages.html" %}
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+
+        {% block content %}
+
+        {% endblock content %}
+
+        {% block extra_js %}
+        {% endblock extra_js %}
+        
+    </main>
+    {% include "includes/footer.html" %}
+  </body>
+</html>

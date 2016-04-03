@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="main_content m_center">
+        {% if is_buyer_register %}
+            {% include 'accounts/includes/buyer_register.html' %}
+        {% else %}
+            {% include 'accounts/includes/seller_register.html' %}
+        {% endif %}
+        <p>You already have an account? <a href="{% url 'accounts:login' %}" class="textBtn">Login</a></p>
+    </div>
+
+{% endblock content %}

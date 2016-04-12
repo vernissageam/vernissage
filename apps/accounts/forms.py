@@ -1,20 +1,14 @@
 # -*- coding: utf-8 -*-
 
 
-import re
-
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm as CoreAuthenticationForm
 from django.contrib.auth.forms import UserCreationForm as CoreUserCreationForm
-from django.core.exceptions import ValidationError
+from image_cropping import ImageCropWidget
 
 from .models import User
-from core.utils import generate_activation_key
-
-
-def alphanumeric(value):
-    if not re.match("^[a-zA-Z]*$", value):
-        raise ValidationError('Please enter a valid name')
+from .utils import generate_activation_key
+from .validators import alphanumeric, phone_number
 
 
 class LoginFormMixin(object):
@@ -60,7 +54,7 @@ class LoginFormMixin(object):
         return self.cleaned_data
 
 
-class AuthenficationForm(LoginFormMixin, CoreAuthenticationForm):
+class AuthenticationForm(LoginFormMixin, CoreAuthenticationForm):
     username = forms.EmailField(
         label='email',
         max_length=255,
@@ -178,3 +172,40 @@ class ChangePassForm(forms.Form):
         user.set_password(password)
         user.auth_key = None
         user.save()
+
+
+class AccountUpdateForm(forms.ModelForm):
+
+    # def __init__(self, *args, **kwargs):
+    #     super(AccountUpdateForm, self).__init__(*args, **kwargs)
+
+    first_name = forms.CharField(required=True, validators=[alphanumeric], widget=forms.TextInput(
+            attrs={'class': 'formControl'}), )
+    last_name = forms.CharField(required=True, validators=[alphanumeric], widget=forms.TextInput(
+            attrs={'class': 'formControl'}), )
+    email = forms.EmailField(required=True, widget=forms.TextInput(
+            attrs={'class': 'formControl'}), )
+    username = forms.CharField(required=True, widget=forms.TextInput(
+            attrs={'class': 'formControl'}), )
+    phone_number = forms.CharField(required=True, validators=[phone_number], widget=forms.TextInput(
+            attrs={'class': 'formControl'}), )
+    password = forms.CharField(required=False, widget=forms.PasswordInput(
+            attrs={'class': 'formControl'}), )
+    password_repeat = forms.CharField(required=False, widget=forms.PasswordInput(
+            attrs={'class': 'formControl'}), )
+    image = forms.ImageField(required=False, widget=forms.ClearableFileInput(
+            attrs={'class': 'formControl'}), )
+
+    def clean(self):
+
+        password = self.cleaned_data.get('password')
+        password_repeat = self.cleaned_data.get('password_repeat')
+
+        if password and password != password_repeat:
+            raise forms.ValidationError("Passwords don't match")
+
+        return self.cleaned_data
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email', 'username', 'phone_number', 'image', )

@@ -15,6 +15,7 @@ import sys
 
 from django.core.exceptions import ImproperlyConfigured
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
+from easy_thumbnails.conf import Settings as thumbnail_settings
 
 
 def get_env_variable(var_name):
@@ -54,6 +55,8 @@ DEFAULT_APPS = [
 THIRD_PARTY_APPS = [
     'social.apps.django_app.default',
     'braces',
+    'easy_thumbnails',
+    'image_cropping',
 ]
 
 PROJECT_APPS = [
@@ -97,6 +100,10 @@ TEMPLATES = [
         },
     },
 ]
+
+THUMBNAIL_PROCESSORS = (
+    'image_cropping.thumbnail_processors.crop_corners',
+) + thumbnail_settings.THUMBNAIL_PROCESSORS
 
 WSGI_APPLICATION = 'vern.wsgi.application'
 

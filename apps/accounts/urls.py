@@ -14,4 +14,5 @@ urlpatterns = [
     url(r'^change_pass/(?P<reset_key>\w+)/$', views.ChangePass.as_view(), name='change_pass'),
     url(r'^activate/(?P<activate_key>\w+)/$', views.ActivationView.as_view(), name='activate'),
     url(r'^check_unique_data/', views.CheckUniqueDataView.as_view(), name='check_unique_data'),
+    url(r'^update/(?P<pk>\d+)', views.AccountUpdateView.as_view(), name='update'),
 ]

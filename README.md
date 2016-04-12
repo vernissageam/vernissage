@@ -1,7 +1,6 @@
 =================
-Keto Recipe Finder
+Vern Project
 =================
-
 
 -----------------
 Development setup
@@ -42,12 +41,12 @@ Create virtualenv
 
 .. code-block:: bash
 
-    $ cd /var/envs && mkvirtualenv keto
+    $ cd /var/envs && mkvirtualenv vern
     
 Install requirements for a project.
 
 .. code-block:: bash
 
-    $ cd /var/www/keto && pip install -r requirements/local.txt
+    $ cd /var/www/vern && pip install -r requirements/local.txt
     
     $ pip install pyopenssl ndg-httpsclient pyasn1

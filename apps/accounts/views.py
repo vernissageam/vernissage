@@ -2,13 +2,15 @@
 
 
 from django.views.generic import TemplateView, View
+from django.views.generic.edit import UpdateView
+from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth import login
-from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
 from braces.views import AnonymousRequiredMixin
 
-from .forms import AuthenficationForm, ResetForm, ChangePassForm
+from .forms import AuthenticationForm, ResetForm, ChangePassForm, AccountUpdateForm
 from .mails import reset_mail
 from .models import User
 from .mixins import RegisterMixin
@@ -17,7 +19,7 @@ from shops.forms import ShopForm
 
 class LoginView(AnonymousRequiredMixin, TemplateView):
     template_name = 'accounts/login.html'
-    form = AuthenficationForm
+    form = AuthenticationForm
     authenticated_redirect_url = '/'
 
     def get_context_data(self, **kwargs):
@@ -99,48 +101,6 @@ class RegisterSellerView(AnonymousRequiredMixin, RegisterMixin):
                 form=form,
                 shop_form=shop_form,
             ))
-
-
-# class RegisterView(AnonymousRequiredMixin, TemplateView):
-#     template_name = 'accounts/register.html'
-#     form = RegisterForm
-#     authenticated_redirect_url = '/'
-#
-#     def get(self, request, *args, **kwargs):
-#         try:
-#             data = request.session['social_data']
-#         except KeyError:
-#             data = {}
-#
-#         if data:
-#             form = self.form(data=data)
-#             del request.session['social_data']
-#             return self.render_to_response(self.get_context_data(form=form))
-#         else:
-#             return self.render_to_response(self.get_context_data())
-#
-#     def get_context_data(self, **kwargs):
-#         context = super(RegisterView, self).get_context_data(**kwargs)
-#         if 'form' not in kwargs:
-#             context['form'] = self.form()
-#
-#         return context
-#
-#     def post(self, request):
-#         form = self.form(data=request.POST)
-#         if form.is_valid():
-#             password = form.cleaned_data['password']
-#             new_user_instance = form.save(commit=False)
-#             new_user_instance.set_password(password)
-#             new_user_instance.is_active = 0
-#             new_user_instance.save()
-#             activation_mail(new_user_instance)
-#
-#             messages.success(request, "Your account was successfully created. "
-#                                       "Go to your email and activate your account.")
-#             return HttpResponseRedirect('/')
-#         else:
-#             return self.render_to_response(self.get_context_data(form=form))
 
 
 class ResetPassView(AnonymousRequiredMixin, TemplateView):
@@ -237,3 +197,27 @@ class CheckUniqueDataView(View):
                 return HttpResponse("true")
 
         return HttpResponse("false")
+
+
+class AccountUpdateView(UpdateView):
+    model = User
+    success_url = reverse_lazy('pages:home')
+    template_name = 'accounts/update.html'
+    form_class = AccountUpdateForm
+
+    # def get_context_data(self, **kwargs):
+    #     context = super(AccountUpdateView, self).get_context_data(**kwargs)
+    #     return context
+
+    def form_valid(self, form):
+        if form.cleaned_data.get('password'):
+            form.instance.set_password(form.cleaned_data['password'])
+            update_session_auth_hash(self.request, form.instance)
+
+        return super(AccountUpdateView, self).form_valid(form)
+
+    # def get_form_kwargs(self, **kwargs):
+    #     kwargs = super(AccountUpdateView, self).get_form_kwargs()
+    #     kwargs['request'] = self.request
+    #     return kwargs
+

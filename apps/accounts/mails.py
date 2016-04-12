@@ -8,7 +8,7 @@ from django.utils.html import strip_tags
 from django.core.mail import send_mail
 
 from .models import User
-from core.utils import generate_activation_key
+from .utils import generate_activation_key
 
 
 def activation_mail(user):

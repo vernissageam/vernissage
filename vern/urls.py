@@ -27,8 +27,10 @@ urlpatterns = [
     # client part
     url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^', include('pages.urls', namespace='pages')),
-    url(r'^accounts/', include('accounts.urls', namespace='accounts')),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+    url(r'^accounts/', include('accounts.urls', namespace='accounts')),
+    url(r'^shops/', include('shops.urls', namespace='shops')),
+
 
 ]
 

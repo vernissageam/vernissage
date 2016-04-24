@@ -15,6 +15,7 @@ from .mails import reset_mail
 from .models import User
 from .mixins import RegisterMixin
 from shops.forms import ShopForm
+from shops.models import Shop
 
 
 class LoginView(AnonymousRequiredMixin, TemplateView):
@@ -205,10 +206,6 @@ class AccountUpdateView(UpdateView):
     template_name = 'accounts/update.html'
     form_class = AccountUpdateForm
 
-    # def get_context_data(self, **kwargs):
-    #     context = super(AccountUpdateView, self).get_context_data(**kwargs)
-    #     return context
-
     def form_valid(self, form):
         if form.cleaned_data.get('password'):
             form.instance.set_password(form.cleaned_data['password'])
@@ -216,8 +213,34 @@ class AccountUpdateView(UpdateView):
 
         return super(AccountUpdateView, self).form_valid(form)
 
-    # def get_form_kwargs(self, **kwargs):
-    #     kwargs = super(AccountUpdateView, self).get_form_kwargs()
-    #     kwargs['request'] = self.request
-    #     return kwargs
 
+class AddToFavoritesShop(View):
+
+    def get(self, request, shop_id):
+
+        try:
+            shop = Shop.objects.get(pk=shop_id)
+        except Shop.DoesNotExist:
+            return HttpResponse('false')
+
+        # Allow add/remove favorite shops only BUYERS
+        if not request.user.type == 'buyer':
+            return HttpResponse('false')
+
+        request.user.favorite_shops.add(shop)
+
+        return HttpResponse('true')
+
+
+class RemoveFromFavoritesShop(View):
+
+    def get(self, request, shop_id):
+
+        try:
+            shop = Shop.objects.get(pk=shop_id)
+        except Shop.DoesNotExist:
+            return HttpResponse('false')
+
+        request.user.favorite_shops.remove(shop)
+
+        return HttpResponse('true')

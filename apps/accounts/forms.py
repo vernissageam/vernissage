@@ -176,9 +176,6 @@ class ChangePassForm(forms.Form):
 
 class AccountUpdateForm(forms.ModelForm):
 
-    # def __init__(self, *args, **kwargs):
-    #     super(AccountUpdateForm, self).__init__(*args, **kwargs)
-
     first_name = forms.CharField(required=True, validators=[alphanumeric], widget=forms.TextInput(
             attrs={'class': 'formControl'}), )
     last_name = forms.CharField(required=True, validators=[alphanumeric], widget=forms.TextInput(

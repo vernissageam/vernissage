@@ -1,0 +1,17 @@
+{% load navigate %}
+
+{% if is_paginated %}
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?{{ page_obj.previous_page_number|pagination_url_replace:request }}"> previous </a>
+            {% endif %}
+            <span class="page-current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+            {% if page_obj.has_next %}
+                <a href="?{{ page_obj.next_page_number|pagination_url_replace:request }}"> next </a>
+            {% endif %}
+        </span>
+    </div>
+{% endif %}

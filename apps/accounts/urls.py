@@ -15,4 +15,7 @@ urlpatterns = [
     url(r'^activate/(?P<activate_key>\w+)/$', views.ActivationView.as_view(), name='activate'),
     url(r'^check_unique_data/', views.CheckUniqueDataView.as_view(), name='check_unique_data'),
     url(r'^update/(?P<pk>\d+)', views.AccountUpdateView.as_view(), name='update'),
+    url(r'^add_to_favorite_shops/(?P<shop_id>\d+)', views.AddToFavoritesShop.as_view(), name='add_to_favorite_shops'),
+    url(r'^remove_from_favorite_shops/(?P<shop_id>\d+)', views.RemoveFromFavoritesShop.as_view(),
+        name='remove_from_favorite_shops'),
 ]

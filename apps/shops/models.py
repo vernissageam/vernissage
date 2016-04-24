@@ -25,4 +25,4 @@ class Shop(AbstractDate):
     background_image = models.ImageField(default='shops_backgrounds/default.png', upload_to='shops_backgrounds')
 
     def __unicode__(self):
-        return self.name or 'Seller Profile'
+        return self.name or 'Shop object'

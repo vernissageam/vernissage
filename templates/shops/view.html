@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <div ng-app="ShopProductsApp" ng-controller="ShopProductsCtrl">
+        <div>
+            <h3 class="page_title"><span>{{ shop.name }}</span></h3>
+            <p> {{ shop.description }} </p>
+        </div>
+        {% include 'shops/includes/favorite_shops_actions.html' %}
+        <div>
+            <img width="300" src="{{ shop.background_image.url }}"/>
+        </div>
+        <p> TODO show all products </p>
+
+    </div>
+
+{% endblock content %}

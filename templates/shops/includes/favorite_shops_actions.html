@@ -1,0 +1,11 @@
+<!-- Allow add/remove favorite shops only BUYERS -->
+{% if user.type == 'buyer' %}
+
+    <button class="{% if not shop.is_favorite %} hidden {% endif %}" ng-click="remove_from_favorite_shops($event)" id="remove_from_favorite_shops_{{ shop.id }}" shop="{{ shop.id }}">
+        Remove from favorites
+    </button>
+    <button class="{% if shop.is_favorite %} hidden {% endif %}" ng-click="add_to_favorite_shops($event)" id="add_to_favorite_shops_{{ shop.id }}" shop="{{ shop.id }}">
+        Add to favorite
+    </button>
+
+{% endif %}

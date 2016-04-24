@@ -20,6 +20,7 @@ class User(AbstractUser, AbstractDate):
     phone_number = models.CharField(null=True, blank=True, max_length=32)
     image = ImageCropField(default='profiles/default.png', upload_to='profiles')
     cropping = ImageRatioField('image', '430x360')
+    favorite_shops = models.ManyToManyField('shops.Shop', related_name='favorite_shops')
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
 

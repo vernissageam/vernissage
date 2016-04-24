@@ -1,0 +1,6 @@
+.idea
+*.pyc
+.vagrant
+Vagrantfile
+media/*
+collectstatic/*

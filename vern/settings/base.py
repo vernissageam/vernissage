@@ -64,6 +64,7 @@ PROJECT_APPS = [
     'pages',
     'core',
     'shops',
+    'products',
 ]
 
 MIDDLEWARE_CLASSES = [

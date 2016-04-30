@@ -21,6 +21,7 @@ class User(AbstractUser, AbstractDate):
     image = ImageCropField(default='profiles/default.png', upload_to='profiles')
     cropping = ImageRatioField('image', '430x360')
     favorite_shops = models.ManyToManyField('shops.Shop', related_name='favorite_shops')
+    wish_products = models.ManyToManyField('products.Product', related_name='wish_products')
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
 

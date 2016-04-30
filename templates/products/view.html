@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <div ng-app="ShopProductsApp" ng-controller="ShopProductsCtrl">
+        <div>
+            <h3 class="page_title"><span>{{ product.name }}</span></h3>
+            <p> {{ product.description }} </p>
+        </div>
+        {% include 'products/includes/wish_products_actions.html' %}
+        {% include 'products/includes/cart_products_actions.html' %}
+        <div>
+            <img width="300" src="{{ product.image.url }}"/>
+        </div>
+    </div>
+
+{% endblock content %}

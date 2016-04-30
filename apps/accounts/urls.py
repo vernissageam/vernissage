@@ -18,4 +18,7 @@ urlpatterns = [
     url(r'^add_to_favorite_shops/(?P<shop_id>\d+)', views.AddToFavoritesShop.as_view(), name='add_to_favorite_shops'),
     url(r'^remove_from_favorite_shops/(?P<shop_id>\d+)', views.RemoveFromFavoritesShop.as_view(),
         name='remove_from_favorite_shops'),
+    url(r'^add_to_wish_list/(?P<product_id>\d+)', views.AddToWishList.as_view(), name='add_to_wish_list'),
+    url(r'^remove_from_wish_list/(?P<product_id>\d+)', views.RemoveFromWishList.as_view(),
+        name='remove_from_wish_list'),
 ]

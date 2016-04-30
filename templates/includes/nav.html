@@ -11,13 +11,16 @@
         <div class="pullRight">
             <nav>
                 <ul>
+                    <li><a href="{% url 'shops:list' %}" class="textBtn">Shops list</a></li>
+                    <li><a href="{% url 'products:list' %}" class="textBtn">Products list</a></li>
                     {% if user.is_authenticated %}
                         <li><a href="{% url 'accounts:update' pk=user.id %}" class="textBtn">Profile</a></li>
-                        <li><a href="{% url 'shops:list' %}" class="textBtn">Shops list</a></li>
                         {% if user.type == 'seller' %}
                             <li><a href="{% url 'shops:update' pk=user.shop.id %}" class="textBtn">Shop details</a></li>
                         {% else %}
                             <li><a href="{% url 'shops:favorite_list' %}" class="textBtn">Favorite Shops list</a></li>
+                            <li><a href="{% url 'products:wish_list' %}" class="textBtn">Wish list</a></li>
+                            <li><a href="{% url 'products:cart' %}" class="textBtn">My Cart</a></li>
                         {% endif %}
                         <li><a href="{% url 'accounts:logout' %}" class="textBtn">Logout</a></li>
                     {% else %}

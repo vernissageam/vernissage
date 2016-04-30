@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="container hasPadTB all_notifications" ng-app="ShopProductsApp" ng-controller="ShopProductsCtrl">
+        <h3 class="page_title"><span>All products</span></h3>
+
+            {% for product in product_list %}
+                <div>
+                    <p> {{ product.name }} </p>
+                    <img width="100" src="{{ product.image.url }}"/>
+                    <p> <a href="{% url 'products:view' pk=product.id %}">View product</a> </p>
+                    {% include 'products/includes/wish_products_actions.html' %}
+                    {% include 'products/includes/cart_products_actions.html' %}
+                </div>
+            {% empty %}
+                There are not any product yet
+            {% endfor %}
+
+        {% include 'includes/pagination.html' %}
+    </div>
+
+{% endblock content %}
+
+{% block extra_js %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+        });
+    </script>
+{% endblock extra_js %}

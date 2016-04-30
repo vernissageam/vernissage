@@ -1,0 +1,12 @@
+<!-- Allow add/remove product to/from wish list only2 BUYERS -->
+
+{% if user.type == 'buyer' %}
+
+    <button class="{% if not product.is_wish %} hidden {% endif %}" ng-click="remove_from_wish_list($event)" id="remove_from_wish_list_{{ product.id }}" product="{{ product.id }}">
+        Remove from wish list
+    </button>
+    <button class="{% if product.is_wish %} hidden {% endif %}" ng-click="add_to_wish_list($event)" id="add_to_wish_list_{{ product.id }}" product="{{ product.id }}">
+        Add to wish list
+    </button>
+
+{% endif %}

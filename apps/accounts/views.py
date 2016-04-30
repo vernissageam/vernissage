@@ -14,8 +14,9 @@ from .forms import AuthenticationForm, ResetForm, ChangePassForm, AccountUpdateF
 from .mails import reset_mail
 from .models import User
 from .mixins import RegisterMixin
-from shops.forms import ShopForm
 from shops.models import Shop
+from shops.forms import ShopForm
+from products.models import Product, Cart
 
 
 class LoginView(AnonymousRequiredMixin, TemplateView):
@@ -58,7 +59,13 @@ class RegisterBuyerView(AnonymousRequiredMixin, RegisterMixin):
     def post(self, request):
 
         form = self.form(data=request.POST)
-        if self.save_user(form, 'buyer'):
+
+        new_user = self.save_user(form, 'buyer')
+        if new_user:
+            Cart.objects.create(
+                user=new_user
+            )
+
             messages.success(request, "Your account was successfully created. "
                                       "Go to your email and activate your account.")
             return HttpResponseRedirect('/')
@@ -81,6 +88,7 @@ class RegisterSellerView(AnonymousRequiredMixin, RegisterMixin):
     def post(self, request):
         form = self.form(data=request.POST)
         shop_form = self.shop_form(data=request.POST)
+
         if not shop_form.is_valid():
             return self.render_to_response(self.get_context_data(
                 form=form,
@@ -244,3 +252,36 @@ class RemoveFromFavoritesShop(View):
         request.user.favorite_shops.remove(shop)
 
         return HttpResponse('true')
+
+
+class AddToWishList(View):
+
+    def get(self, request, product_id):
+
+        try:
+            product = Product.objects.get(pk=product_id)
+        except Product.DoesNotExist:
+            return HttpResponse('false')
+
+        # Allow add/remove to/from wish list only BUYERS
+        if not request.user.type == 'buyer':
+            return HttpResponse('false')
+
+        request.user.wish_products.add(product)
+
+        return HttpResponse('true')
+
+
+class RemoveFromWishList(View):
+
+    def get(self, request, product_id):
+
+        try:
+            product = Product.objects.get(pk=product_id)
+        except Product.DoesNotExist:
+            return HttpResponse('false')
+
+        request.user.wish_products.remove(product)
+
+        return HttpResponse('true')
+

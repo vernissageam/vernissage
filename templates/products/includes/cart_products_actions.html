@@ -1,0 +1,12 @@
+<!-- Allow add/remove product to/from cart only BUYERS -->
+
+{% if user.type == 'buyer' %}
+
+    <button class="{% if not product.is_in_cart %} hidden {% endif %}" ng-click="remove_from_cart($event)" id="remove_from_cart_{{ product.id }}" product="{{ product.id }}">
+        Remove from cart
+    </button>
+    <button class="{% if product.is_in_cart %} hidden {% endif %}" ng-click="add_to_cart($event)" id="add_to_cart_{{ product.id }}" product="{{ product.id }}">
+        Add to cart
+    </button>
+
+{% endif %}

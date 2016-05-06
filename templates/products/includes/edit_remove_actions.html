@@ -1,12 +1,13 @@
-<!-- Allow add/remove product to/from cart only BUYERS -->
+<!-- Allow edit/remove product only SELLERS -->
 
-{% if user.type == 'buyer' %}
+{% if user.type == 'seller' and product.shop_id == user.shop.id %}
 
-    <button class="{% if not product.is_in_cart %} hidden {% endif %}" ng-click="remove_from_cart($event)" id="remove_from_cart_{{ product.id }}" product="{{ product.id }}">
-        Remove from cart
-    </button>
-    <button class="{% if product.is_in_cart %} hidden {% endif %}" ng-click="add_to_cart($event)" id="add_to_cart_{{ product.id }}" product="{{ product.id }}">
-        Add to cart
+    <form method="POST" action="{% url "products:delete" pk=product.id %}">
+       {% csrf_token %}
+        <button type="submit" onclick="return confirm('Are you sure?')"> Remove </button>
+    </form>
+    <button>
+        <a href="{% url 'products:update' pk=product.id %}" > Edit </a>
     </button>
 
 {% endif %}

@@ -1,27 +1,26 @@
 {% extends "base.html" %}
 {% load static %}
-{% load cropping %}
 
 {% block content %}
 
-    <form id="shop_update_form" action="" method="post" enctype="multipart/form-data">
+    <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.non_field_errors }}
 
-        Shop name
+        Product name
         {{ form.name }}
         {{ form.name.errors }}<br>
 
-        Shop description
+        Product description
         {{ form.description }}
         {{ form.description.errors }}<br>
 
-        Shop categories
+        Product categories
         {{ form.categories }}
         {{ form.categories.errors }}<br>
 
-        Background image
-        {{ form.background_image }}
+        Product image
+        {{ form.image }}
 
         <input type="submit" value="Save"/>
     </form>

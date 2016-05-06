@@ -5,6 +5,7 @@
     <div ng-app="ShopProductsApp" ng-controller="ShopProductsCtrl">
         <div>
             <h3 class="page_title"><span>{{ shop.name }}</span></h3>
+            <a href="{% url 'products:shop_products' pk=shop.id %}"> View all products of this shop </a>
             <p> {{ shop.description }} </p>
         </div>
         {% include 'shops/includes/favorite_shops_actions.html' %}

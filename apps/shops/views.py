@@ -4,18 +4,22 @@
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import UpdateView
 from django.core.urlresolvers import reverse_lazy
-from django.db.models import Count, Case, When, IntegerField
+from django.db.models import Count, Case, When
 from django.shortcuts import get_object_or_404
 
 from .models import Shop
 from .forms import ShopForm
 
 
+# TODO seller type required
 class ShopUpdateView(UpdateView):
     model = Shop
     success_url = reverse_lazy('pages:home')
     template_name = 'shops/update.html'
     form_class = ShopForm
+
+    def get_object(self):
+        return get_object_or_404(self.model, pk=self.request.user.shop.id)
 
 
 class ShopsListView(ListView):
@@ -31,6 +35,7 @@ class ShopsListView(ListView):
         return shops
 
 
+# TODO buyer type required
 class FavoriteShopsListView(ShopsListView):
 
     def get_queryset(self):

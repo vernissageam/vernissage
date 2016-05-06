@@ -16,7 +16,9 @@
                     {% if user.is_authenticated %}
                         <li><a href="{% url 'accounts:update' pk=user.id %}" class="textBtn">Profile</a></li>
                         {% if user.type == 'seller' %}
-                            <li><a href="{% url 'shops:update' pk=user.shop.id %}" class="textBtn">Shop details</a></li>
+                            <li><a href="{% url 'shops:update' %}" class="textBtn">Shop details</a></li>
+                            <li><a href="{% url 'products:my_products' %}" class="textBtn">My products</a></li>
+                            <li><a href="{% url 'products:create' %}" class="textBtn">Add product</a></li>
                         {% else %}
                             <li><a href="{% url 'shops:favorite_list' %}" class="textBtn">Favorite Shops list</a></li>
                             <li><a href="{% url 'products:wish_list' %}" class="textBtn">Wish list</a></li>

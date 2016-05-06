@@ -1,22 +1,18 @@
 # -*- coding: utf-8 -*-
 
 
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.views.generic import View, ListView, DetailView
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.core.urlresolvers import reverse_lazy
-from django.db.models import Count, Case, When, IntegerField
+from django.contrib import messages
+from django.db.models import Count, Case, When
 from django.shortcuts import get_object_or_404
 from braces.views import LoginRequiredMixin
 
 from .models import Product
-
-
-# class ShopUpdateView(UpdateView):
-#     model = Shop
-#     success_url = reverse_lazy('pages:home')
-#     template_name = 'shops/update.html'
-#     form_class = ShopForm
+from .forms import ProductForm
+from shops.models import Shop
 
 
 class ProductsListView(ListView):
@@ -37,6 +33,7 @@ class ProductsListView(ListView):
         return products
 
 
+# TODO buyer type required
 class WishListView(LoginRequiredMixin, ProductsListView):
 
     def get_queryset(self):
@@ -48,6 +45,7 @@ class WishListView(LoginRequiredMixin, ProductsListView):
         return products
 
 
+# TODO buyer type required
 class CartView(LoginRequiredMixin, ProductsListView):
 
     def get_queryset(self):
@@ -56,6 +54,65 @@ class CartView(LoginRequiredMixin, ProductsListView):
             .annotate(is_in_cart=Count('id'))
 
         return cart
+
+
+class ShopProductsView(ProductsListView):
+
+    def get_queryset(self):
+        try:
+            shop = Shop.objects.get(pk=self.kwargs['pk'])
+        except Shop.DoesNotExist:
+            raise Http404
+
+        products = shop.product_set\
+            .all()\
+            .annotate(is_wish=Count(Case(When(wish_products__id=self.request.user.id, then=1))))\
+            .annotate(is_in_cart=Count('id'))
+
+        return products
+
+
+# TODO buyer type required
+class AddToCart(LoginRequiredMixin, View):
+
+    def get(self, request, product_id):
+
+        try:
+            product = Product.objects.get(pk=product_id)
+        except Product.DoesNotExist:
+            return HttpResponse('false')
+
+        # Allow add/remove to/from cart only BUYERS
+        if not request.user.type == 'buyer':
+            return HttpResponse('false')
+
+        request.user.cart.products.add(product)
+
+        return HttpResponse('true')
+
+
+# TODO buyer type required
+class RemoveFromCart(LoginRequiredMixin, View):
+
+    def get(self, request, product_id):
+
+        try:
+            product = Product.objects.get(pk=product_id)
+        except Product.DoesNotExist:
+            return HttpResponse('false')
+
+        request.user.cart.products.remove(product)
+
+        return HttpResponse('true')
+
+
+# TODO seller type required
+class MyProductsView(LoginRequiredMixin, ProductsListView):
+
+    def get_queryset(self):
+        products = Product.objects.filter(shop=self.request.user.shop)
+
+        return products
 
 
 class ProductDetailView(DetailView):
@@ -77,33 +134,35 @@ class ProductDetailView(DetailView):
         return product
 
 
-class AddToCart(LoginRequiredMixin, View):
+# TODO seller type required
+class ProductCreate(CreateView):
+    model = Product
+    success_url = reverse_lazy('products:my_products')
+    template_name = 'products/create.html'
+    form_class = ProductForm
 
-    def get(self, request, product_id):
-
-        try:
-            product = Product.objects.get(pk=product_id)
-        except Product.DoesNotExist:
-            return HttpResponse('false')
-
-        # Allow add/remove to/from cart only BUYERS
-        if not request.user.type == 'buyer':
-            return HttpResponse('false')
-
-        request.user.cart.products.add(product)
-
-        return HttpResponse('true')
+    def form_valid(self, form):
+        form.instance.shop = self.request.user.shop
+        return super(ProductCreate, self).form_valid(form)
 
 
-class RemoveFromCart(LoginRequiredMixin, View):
+# TODO seller type required
+class ProductUpdate(UpdateView):
+    model = Product
+    success_url = reverse_lazy('products:my_products')
+    template_name = 'products/update.html'
+    form_class = ProductForm
 
-    def get(self, request, product_id):
+    def get_object(self, queryset=None):
+        return get_object_or_404(self.model, pk=self.kwargs['pk'], shop=self.request.user.shop)
 
-        try:
-            product = Product.objects.get(pk=product_id)
-        except Product.DoesNotExist:
-            return HttpResponse('false')
 
-        request.user.cart.products.remove(product)
+# TODO seller type required
+class ProductDelete(DeleteView):
+    model = Product
+    success_url = reverse_lazy('products:my_products')
 
-        return HttpResponse('true')
+    def get_object(self, queryset=None):
+
+        messages.success(self.request, 'Product has been successfully deleted')
+        return get_object_or_404(self.model, pk=self.kwargs['pk'], shop=self.request.user.shop)
